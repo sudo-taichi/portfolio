@@ -32,6 +32,11 @@ resource "aws_cloudfront_distribution" "this" {
 
     cache_policy_id            = "658327ea-f89d-4fab-a63d-7e88639e58f6"
     response_headers_policy_id = local.managed_security_headers_policy_id
+
+    function_association {
+      event_type   = "viewer-request"
+      function_arn = aws_cloudfront_function.rewrite_index.arn
+    }
   }
 
   custom_error_response {
@@ -57,4 +62,12 @@ resource "aws_cloudfront_distribution" "this" {
   viewer_certificate {
     cloudfront_default_certificate = true
   }
+}
+
+resource "aws_cloudfront_function" "rewrite_index" {
+  name    = "${var.bucket_id}-rewrite-index"
+  runtime = "cloudfront-js-2.0"
+  comment = "Rewrite directory paths to index.html for static site hosting"
+  publish = true
+  code    = file("${path.module}/rewrite-index.js")
 }
