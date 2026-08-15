@@ -12,3 +12,8 @@ output "bucket_id" {
   description = "デプロイ先の S3 バケット名"
   value       = module.static_site.bucket_id
 }
+
+output "github_actions_role_arn" {
+  description = "GitHub Actions のワークフローで指定する IAM ロール ARN"
+  value       = module.github_oidc.role_arn
+}

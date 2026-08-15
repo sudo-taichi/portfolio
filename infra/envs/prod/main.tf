@@ -29,3 +29,11 @@ module "cdn" {
   web_acl_arn                 = module.waf.web_acl_arn
   comment                     = "portfolio site"
 }
+
+module "github_oidc" {
+  source = "../../modules/github-oidc"
+
+  github_repository = "sudo-taichi/portfolio"
+  site_bucket_arn   = "arn:aws:s3:::${var.site_bucket_name}"
+  distribution_arn  = local.distribution_arn
+}
