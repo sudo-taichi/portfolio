@@ -37,3 +37,11 @@ module "github_oidc" {
   site_bucket_arn   = "arn:aws:s3:::${var.site_bucket_name}"
   distribution_arn  = local.distribution_arn
 }
+
+module "monitoring" {
+  source = "../../modules/monitoring"
+
+  distribution_id    = module.cdn.distribution_id
+  notification_email = "ta1.milan69@gmail.com"
+}
+
