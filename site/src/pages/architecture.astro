@@ -1,0 +1,234 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import DetailLayout from "../layouts/DetailLayout.astro";
+
+const repoUrl = "https://github.com/sudo-taichi/portfolio";
+
+const headings = [
+  { depth: 2, slug: "構成図", text: "構成図" },
+  { depth: 2, slug: "技術スタック", text: "技術スタック" },
+  { depth: 2, slug: "設計上こだわった点", text: "設計上こだわった点" },
+  { depth: 2, slug: "設計判断の記録", text: "設計判断の記録" },
+];
+
+const stack = [
+  { area: "フロントエンド", tech: "Astro（静的サイト生成 / TypeScript strict）" },
+  { area: "ホスティング", tech: "Amazon S3（非公開バケット）" },
+  { area: "CDN", tech: "Amazon CloudFront（OAC / 定額料金プラン Free ティア）" },
+  { area: "セキュリティ", tech: "AWS WAF v2 / Managed SecurityHeadersPolicy" },
+  { area: "IaC", tech: "Terraform 1.15（モジュール分割 / S3 backend）" },
+  { area: "CI/CD", tech: "GitHub Actions（OIDC 認証）" },
+  { area: "監視", tech: "Amazon SNS / AWS Budgets" },
+];
+
+const decisions = [
+  {
+    title: "S3 を公開せず OAC 経由のみ許可",
+    body: "バケットへの直接アクセスを遮断している。CloudFront を迂回されると WAF もキャッシュも効かないためだ。旧来の OAI ではなく、SigV4 署名ベースの OAC を採用した。",
+  },
+  {
+    title: "長期の認証情報を持たない",
+    body: "GitHub Actions から AWS への認証は OIDC で行っている。GitHub Secrets にアクセスキーを保存していない。実行のたびに一時的な認証情報が発行され、セッション終了後に失効する。",
+  },
+  {
+    title: "CI に与える権限を最小化",
+    body: "デプロイに必要な S3 の4アクションと CloudFront の2アクションのみを許可している。対象リソースも当該バケット・当該ディストリビューションに限定している。",
+  },
+  {
+    title: "月額 $0 での運用",
+    body: "CloudFront 定額料金プランの Free ティアを採用し、CDN・WAF・DNS・S3 ストレージを含めて無料で運用している。AWS Budgets で想定外の課金を検知する仕組みも入れている。",
+  },
+];
+
+const adrList = [
+  {
+    id: "0001",
+    title: "ポートフォリオ基盤に AWS を採用する",
+    file: "0001-choose-aws.md",
+  },
+  {
+    id: "0002",
+    title: "S3 へのアクセス制御に OAI ではなく OAC を採用する",
+    file: "0002-use-oac-over-oai.md",
+  },
+  {
+    id: "0003",
+    title: "GitHub Actions の AWS 認証に OIDC を採用する",
+    file: "0003-github-oidc.md",
+  },
+  {
+    id: "0004",
+    title: "CloudFront 定額料金プラン Free ティア採用に伴う機能制約の受け入れ",
+    file: "0004-cloudfront-free-tier-tradeoff.md",
+  },
+];
+---
+
+<BaseLayout
+  title="Architecture | Taichi Sudo"
+  description="このポートフォリオサイト自体を成果物として公開。Terraform で構築した AWS インフラの構成図、技術スタック、セキュリティ設計上の判断、ADR。"
+>
+  <DetailLayout
+    eyebrow="This Site's Architecture"
+    title="このサイトの構成"
+    lead="このポートフォリオサイトは、Terraform で構築した AWS 上のインフラで配信されている。コンテンツを見せるだけでなく、構成そのものを成果物として公開している。"
+    backHref="/"
+    backLabel="トップに戻る"
+    headings={headings}
+  >
+    <Fragment slot="meta">
+      <p class="repo-link">
+        GitHub リポジトリ: <a href={repoUrl} target="_blank" rel="noopener noreferrer">{repoUrl}</a>
+      </p>
+    </Fragment>
+
+    <h2 id="構成図">構成図</h2>
+    <div class="diagram-box">
+      <pre class="diagram">{`ユーザー
+  │
+  ▼
+┌─────────────────────────┐
+│   Amazon CloudFront      │  WAF v2 + SecurityHeadersPolicy
+└────────────┬─────────────┘
+             │ OAC (SigV4 署名)
+             ▼
+┌─────────────────────────┐
+│   Amazon S3（非公開）     │
+└─────────────────────────┘
+
+CI/CD
+  GitHub Actions ──OIDC──▶ IAM Role ──▶ S3 / CloudFront へデプロイ
+
+State
+  Terraform ──▶ S3 backend + DynamoDB lock`}</pre>
+    </div>
+
+    <h2 id="技術スタック">技術スタック</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>領域</th>
+          <th>採用技術</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          stack.map((row) => (
+            <tr>
+              <td>{row.area}</td>
+              <td>{row.tech}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+
+    <h2 id="設計上こだわった点">設計上こだわった点</h2>
+    <div class="decisions">
+      {
+        decisions.map((d) => (
+          <div class="decision-card">
+            <p class="decision-title">{d.title}</p>
+            <p class="decision-body">{d.body}</p>
+          </div>
+        ))
+      }
+    </div>
+
+    <h2 id="設計判断の記録">設計判断の記録</h2>
+    <p>技術選定の理由は ADR（Architecture Decision Record）として記録している。</p>
+    <ul class="adr-list">
+      {
+        adrList.map((adr) => (
+          <li>
+            <a
+              href={`${repoUrl}/blob/main/docs/adr/${adr.file}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              ADR {adr.id}: {adr.title}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <p>各 ADR は GitHub リポジトリの docs/adr/ 配下で公開している。</p>
+  </DetailLayout>
+</BaseLayout>
+
+<style>
+  .repo-link {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--color-fg-muted);
+    max-width: var(--prose-width);
+    margin-bottom: var(--space-5);
+    word-break: break-all;
+  }
+
+  .diagram-box {
+    max-width: var(--prose-width);
+    margin: 0 0 var(--space-4);
+    padding: var(--space-4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-bg-elevated);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .diagram {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    line-height: 1.5;
+    color: var(--color-fg-muted);
+    white-space: pre;
+  }
+
+  .decisions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    max-width: var(--prose-width);
+    margin-bottom: var(--space-4);
+  }
+
+  .decision-card {
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-bg-elevated);
+  }
+
+  .decision-title {
+    font-weight: 700;
+    color: var(--color-fg);
+    margin: 0 0 var(--space-1);
+  }
+
+  .decision-body {
+    color: var(--color-fg-muted);
+    font-size: 0.92rem;
+    margin: 0;
+  }
+
+  .adr-list {
+    max-width: var(--prose-width);
+    margin: 0 0 var(--space-4);
+  }
+
+  .adr-list li {
+    margin-bottom: var(--space-2);
+    padding-left: 0;
+    list-style: none;
+  }
+
+  .adr-list a {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+  }
+
+  .adr-list a:hover {
+    text-decoration: underline;
+  }
+</style>

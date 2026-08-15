@@ -1,14 +1,5 @@
 ---
 import Section from "./Section.astro";
-
-// TODO: Phase 6〜11 でインフラを実装後、実際の構成図・リンクに差し替える
-const todoItems = [
-  "構成図（Route 53 / CloudFront / OAC / S3 / GitHub Actions OIDC）",
-  "Terraform モジュール構成へのリンク",
-  "CI/CD パイプラインの説明",
-  "コスト最小化の設計判断（CloudFront 定額料金プラン Free ティア）",
-  "GitHub リポジトリへのリンク",
-];
 ---
 
 <Section
@@ -16,55 +7,33 @@ const todoItems = [
   eyebrow="This Site's Architecture"
   title="このサイトのアーキテクチャ"
 >
-  <p class="lead">
-    このポートフォリオサイト自体を、Terraform で構築した AWS 上のインフラとして公開している。
-    構成図・設計判断・コストは README と ADR にまとめる予定。
-  </p>
-  <div class="architecture-placeholder">
-    <p class="placeholder-label">TODO: インフラ実装後に追加</p>
-    <ul>
-      {todoItems.map((item) => <li>{item}</li>)}
-    </ul>
+  <div class="architecture-summary">
+    <p>
+      このポートフォリオサイト自体を、Terraform で構築した AWS 上のインフラとして公開している。
+      コンテンツを見せるだけでなく、構成そのものを成果物として設計した。
+    </p>
+    <a class="more-link" href="/architecture">構成を見る →</a>
   </div>
 </Section>
 
 <style>
-  .lead {
-    color: var(--color-fg);
-    max-width: 60ch;
-    margin-bottom: var(--space-4);
+  .architecture-summary {
+    max-width: var(--prose-width);
   }
 
-  .architecture-placeholder {
-    padding: var(--space-4);
-    border: 1px dashed var(--color-border);
-    border-radius: var(--radius-md);
-  }
-
-  .placeholder-label {
-    font-family: var(--font-mono);
-    font-size: 0.85rem;
-    color: var(--color-accent);
-    margin-bottom: var(--space-2);
-  }
-
-  .architecture-placeholder ul {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-1);
-  }
-
-  .architecture-placeholder li {
-    font-size: 0.9rem;
+  .architecture-summary p {
     color: var(--color-fg-muted);
-    padding-left: var(--space-3);
-    position: relative;
+    margin: 0 0 var(--space-4);
   }
 
-  .architecture-placeholder li::before {
-    content: "-";
-    position: absolute;
-    left: 0;
-    color: var(--color-fg-subtle);
+  .more-link {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .more-link:hover {
+    text-decoration: underline;
   }
 </style>
