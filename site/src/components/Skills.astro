@@ -57,8 +57,56 @@ const cards = await Promise.all(
     margin-bottom: var(--space-2);
   }
 
+  .skill-body :global(h3) {
+    font-size: 0.92rem;
+    color: var(--color-fg);
+    margin: var(--space-3) 0 var(--space-1);
+  }
+
+  .skill-body :global(h3:first-child) {
+    margin-top: 0;
+  }
+
   .skill-body :global(p) {
     font-size: 0.9rem;
+    margin: 0 0 var(--space-2);
+    color: var(--color-fg-muted);
+  }
+
+  .skill-body :global(strong) {
+    color: var(--color-fg);
+  }
+
+  .skill-body :global(ul) {
+    margin: 0 0 var(--space-2);
+    padding-left: 1.1rem;
+    list-style: disc;
+  }
+
+  .skill-body :global(li) {
+    font-size: 0.9rem;
+    color: var(--color-fg-muted);
+    margin-bottom: var(--space-1);
+  }
+
+  .skill-body :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 0 var(--space-2);
+    font-size: 0.85rem;
+  }
+
+  .skill-body :global(th),
+  .skill-body :global(td) {
+    text-align: left;
+    padding: var(--space-1) var(--space-2);
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-fg-muted);
+  }
+
+  .skill-body :global(th) {
+    color: var(--color-fg-subtle);
+    font-weight: 400;
   }
 
   @media (max-width: 40rem) {
