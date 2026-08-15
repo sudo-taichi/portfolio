@@ -1,88 +1,58 @@
 ---
+import { getEntry, render } from "astro:content";
 import Section from "./Section.astro";
 
-// TODO: 各年次・具体的な業務内容は本人ヒアリングの上で確定させる
-const timeline = [
-  {
-    period: "TODO",
-    role: "理学療法士",
-    body: "臨床に従事。TODO: 具体的な業務内容・気づきを記載。",
-  },
-  {
-    period: "TODO",
-    role: "整体師",
-    body: "独立し施術業を営む。TODO: 具体的な業務内容・転身のきっかけを記載。",
-  },
-  {
-    period: "TODO",
-    role: "インフラエンジニア",
-    body: "未経験からクラウドインフラの世界へ。TODO: きっかけ・学習過程を記載。",
-  },
-];
+const entry = await getEntry("about", "index");
+const { Content } = await render(entry!);
 ---
 
 <Section id="about" eyebrow="About" title="経歴">
-  <p class="lead">
-    理学療法士としてキャリアをスタートし、整体師を経て、インフラエンジニアへ。
-    人の身体を診る仕事から、システムの土台を診る仕事へ── 一見遠回りに見える経歴の中にも、
-    「土台を整える」という一貫した軸がある。
-  </p>
-  <ol class="timeline">
-    {
-      timeline.map((item) => (
-        <li class="timeline-item">
-          <span class="timeline-period">{item.period}</span>
-          <div class="timeline-content">
-            <p class="timeline-role">{item.role}</p>
-            <p class="timeline-body">{item.body}</p>
-          </div>
-        </li>
-      ))
-    }
-  </ol>
+  <div class="about-body">
+    <Content />
+  </div>
 </Section>
 
 <style>
-  .lead {
+  .about-body {
+    max-width: 65ch;
+  }
+
+  .about-body :global(h2) {
+    font-size: 1.1rem;
     color: var(--color-fg);
-    max-width: 60ch;
-    margin-bottom: var(--space-5);
+    margin: var(--space-5) 0 var(--space-2);
   }
 
-  .timeline {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-4);
+  .about-body :global(h2:first-child) {
+    margin-top: 0;
   }
 
-  .timeline-item {
-    display: grid;
-    grid-template-columns: 6rem 1fr;
-    gap: var(--space-3);
-    padding-bottom: var(--space-4);
+  .about-body :global(p) {
+    margin: 0 0 var(--space-3);
+    color: var(--color-fg-muted);
+  }
+
+  .about-body :global(strong) {
+    color: var(--color-fg);
+  }
+
+  .about-body :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 0 var(--space-3);
+    font-size: 0.9rem;
+  }
+
+  .about-body :global(th),
+  .about-body :global(td) {
+    text-align: left;
+    padding: var(--space-1) var(--space-2);
     border-bottom: 1px solid var(--color-border);
+    color: var(--color-fg-muted);
   }
 
-  .timeline-item:last-child {
-    border-bottom: none;
-  }
-
-  .timeline-period {
-    font-family: var(--font-mono);
-    color: var(--color-accent);
-    font-size: 0.85rem;
-  }
-
-  .timeline-role {
-    color: var(--color-fg);
-    font-weight: 700;
-    margin-bottom: var(--space-1);
-  }
-
-  @media (max-width: 40rem) {
-    .timeline-item {
-      grid-template-columns: 1fr;
-      gap: var(--space-1);
-    }
+  .about-body :global(th) {
+    color: var(--color-fg-subtle);
+    font-weight: 400;
   }
 </style>
