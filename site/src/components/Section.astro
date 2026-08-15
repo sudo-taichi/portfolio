@@ -1,0 +1,55 @@
+---
+interface Props {
+  id: string;
+  eyebrow: string;
+  title: string;
+}
+
+const { id, eyebrow, title } = Astro.props;
+---
+
+<section id={id} class="section">
+  <div class="section-inner">
+    <header class="section-header">
+      <p class="eyebrow"><span class="prompt">#</span> {eyebrow}</p>
+      <h2>{title}</h2>
+    </header>
+    <div class="section-body">
+      <slot />
+    </div>
+  </div>
+</section>
+
+<style>
+  .section {
+    padding: var(--space-7) var(--space-3);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .section-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+  }
+
+  .section-header {
+    margin-bottom: var(--space-5);
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    color: var(--color-accent);
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 0 0 var(--space-2);
+  }
+
+  .prompt {
+    opacity: 0.7;
+  }
+
+  h2 {
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+    color: var(--color-fg);
+  }
+</style>

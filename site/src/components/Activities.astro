@@ -1,0 +1,57 @@
+---
+import Section from "./Section.astro";
+
+// TODO: 各活動の詳細を本人ヒアリングの上で記載
+const activities = [
+  { title: "社内アプリ企画", body: "TODO: 企画背景・内容・成果を記載する。" },
+  { title: "後進育成", body: "TODO: 育成方針・実績を記載する。" },
+  {
+    title: "ナレッジ体系化",
+    body: "TODO: 手順書・ナレッジベース整備の内容を記載する。",
+  },
+];
+---
+
+<Section id="activities" eyebrow="Activities" title="その他の取り組み">
+  <div class="activity-grid">
+    {
+      activities.map((a) => (
+        <article class="activity-card">
+          <h3>{a.title}</h3>
+          <p>{a.body}</p>
+        </article>
+      ))
+    }
+  </div>
+</Section>
+
+<style>
+  .activity-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+  }
+
+  .activity-card {
+    padding: var(--space-4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-bg-elevated);
+  }
+
+  .activity-card h3 {
+    color: var(--color-fg);
+    font-size: 1rem;
+    margin-bottom: var(--space-2);
+  }
+
+  .activity-card p {
+    font-size: 0.88rem;
+  }
+
+  @media (max-width: 55rem) {
+    .activity-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

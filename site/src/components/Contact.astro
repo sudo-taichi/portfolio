@@ -1,0 +1,58 @@
+---
+import Section from "./Section.astro";
+---
+
+<Section id="contact" eyebrow="Contact" title="Contact">
+  <p class="lead">お気軽にご連絡ください。</p>
+  <div class="contact-links">
+    <!-- TODO: 転職活動用に新規作成した専用メールアドレスに差し替える -->
+    <a class="contact-link" href="mailto:TODO@example.com">
+      <span class="contact-label">Mail</span>
+      TODO@example.com
+    </a>
+    <a
+      class="contact-link"
+      href="https://github.com/TODO"
+      target="_blank"
+      rel="noreferrer"
+    >
+      <span class="contact-label">GitHub</span>
+      github.com/TODO
+    </a>
+  </div>
+</Section>
+
+<style>
+  .lead {
+    color: var(--color-fg);
+    margin-bottom: var(--space-4);
+  }
+
+  .contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .contact-link {
+    font-family: var(--font-mono);
+    display: flex;
+    gap: var(--space-3);
+    align-items: baseline;
+    padding: var(--space-3);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    color: var(--color-fg);
+    width: fit-content;
+  }
+
+  .contact-link:hover {
+    border-color: var(--color-accent-border);
+  }
+
+  .contact-label {
+    color: var(--color-accent);
+    font-size: 0.8rem;
+  }
+</style>

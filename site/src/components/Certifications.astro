@@ -1,0 +1,84 @@
+---
+import Section from "./Section.astro";
+
+// TODO: 取得ストーリー（学習方法・きっかけ）を本人ヒアリングの上で追記
+const certs = [
+  {
+    name: "AZ-305",
+    full: "Microsoft Certified: Azure Solutions Architect Expert",
+    duration: "5ヶ月で取得",
+    story: "TODO: 取得の背景・学習方法を記載する。",
+  },
+  {
+    name: "AWS-SAA",
+    full: "AWS Certified Solutions Architect – Associate",
+    duration: "2ヶ月で取得",
+    story: "TODO: 取得の背景・学習方法を記載する。",
+  },
+];
+---
+
+<Section id="certifications" eyebrow="Certifications" title="保有資格">
+  <div class="cert-grid">
+    {
+      certs.map((cert) => (
+        <article class="cert-card">
+          <p class="cert-name">{cert.name}</p>
+          <p class="cert-full">{cert.full}</p>
+          <p class="cert-duration">{cert.duration}</p>
+          <p class="cert-story">{cert.story}</p>
+        </article>
+      ))
+    }
+  </div>
+</Section>
+
+<style>
+  .cert-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+  }
+
+  .cert-card {
+    padding: var(--space-4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-bg-elevated);
+  }
+
+  .cert-name {
+    font-family: var(--font-mono);
+    color: var(--color-accent);
+    font-size: 1.3rem;
+    margin-bottom: var(--space-1);
+  }
+
+  .cert-full {
+    font-size: 0.85rem;
+    margin-bottom: var(--space-2);
+  }
+
+  .cert-duration {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--color-fg);
+    padding: 0.15rem 0.6rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    margin-bottom: var(--space-3);
+  }
+
+  .cert-story {
+    font-size: 0.88rem;
+    color: var(--color-fg-subtle);
+    font-style: italic;
+  }
+
+  @media (max-width: 40rem) {
+    .cert-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
