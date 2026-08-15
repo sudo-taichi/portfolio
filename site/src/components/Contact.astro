@@ -2,24 +2,29 @@
 import Section from "./Section.astro";
 ---
 
-<Section id="contact" eyebrow="Contact" title="Contact">
-  <p class="lead">お気軽にご連絡ください。</p>
+<Section id="contact" eyebrow="Contact" title="お問い合わせ">
+  <p class="lead">
+    ご覧いただきありがとうございます。<br />
+    お仕事のご相談やご質問がありましたら、以下よりご連絡ください。
+  </p>
   <div class="contact-links">
-    <!-- TODO: 転職活動用に新規作成した専用メールアドレスに差し替える -->
-    <a class="contact-link" href="mailto:TODO@example.com">
-      <span class="contact-label">Mail</span>
-      TODO@example.com
+    <a class="contact-link" href="mailto:ta1.milan69@gmail.com">
+      <span class="contact-label">Email</span>
+      ta1.milan69@gmail.com
     </a>
     <a
       class="contact-link"
-      href="https://github.com/TODO"
+      href="https://github.com/sudo-taichi"
       target="_blank"
       rel="noreferrer"
     >
       <span class="contact-label">GitHub</span>
-      github.com/TODO
+      github.com/sudo-taichi
     </a>
   </div>
+  <p class="note">
+    このサイトのソースコードおよびインフラ構成は GitHub で公開しています。
+  </p>
 </Section>
 
 <style>
@@ -54,5 +59,11 @@ import Section from "./Section.astro";
   .contact-label {
     color: var(--color-accent);
     font-size: 0.8rem;
+  }
+
+  .note {
+    color: var(--color-fg-muted);
+    font-size: 0.9rem;
+    margin-top: var(--space-4);
   }
 </style>

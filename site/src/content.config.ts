@@ -30,4 +30,14 @@ const about = defineCollection({
   schema: z.object({}),
 });
 
-export const collections = { works, skills, about };
+const certifications = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/certifications" }),
+  schema: z.object({}),
+});
+
+const activities = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/activities" }),
+  schema: z.object({}),
+});
+
+export const collections = { works, skills, about, certifications, activities };

@@ -1,84 +1,75 @@
 ---
+import { getEntry, render } from "astro:content";
 import Section from "./Section.astro";
 
-// TODO: 取得ストーリー（学習方法・きっかけ）を本人ヒアリングの上で追記
-const certs = [
-  {
-    name: "AZ-305",
-    full: "Microsoft Certified: Azure Solutions Architect Expert",
-    duration: "5ヶ月で取得",
-    story: "TODO: 取得の背景・学習方法を記載する。",
-  },
-  {
-    name: "AWS-SAA",
-    full: "AWS Certified Solutions Architect – Associate",
-    duration: "2ヶ月で取得",
-    story: "TODO: 取得の背景・学習方法を記載する。",
-  },
-];
+const entry = await getEntry("certifications", "index");
+const { Content } = await render(entry!);
 ---
 
 <Section id="certifications" eyebrow="Certifications" title="保有資格">
-  <div class="cert-grid">
-    {
-      certs.map((cert) => (
-        <article class="cert-card">
-          <p class="cert-name">{cert.name}</p>
-          <p class="cert-full">{cert.full}</p>
-          <p class="cert-duration">{cert.duration}</p>
-          <p class="cert-story">{cert.story}</p>
-        </article>
-      ))
-    }
+  <div class="cert-body">
+    <Content />
   </div>
 </Section>
 
 <style>
-  .cert-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-4);
+  .cert-body {
+    max-width: 65ch;
   }
 
-  .cert-card {
-    padding: var(--space-4);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    background: var(--color-bg-elevated);
+  .cert-body :global(h2) {
+    font-size: 1.1rem;
+    color: var(--color-fg);
+    margin: var(--space-5) 0 var(--space-2);
   }
 
-  .cert-name {
-    font-family: var(--font-mono);
+  .cert-body :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  .cert-body :global(h3) {
+    font-size: 0.95rem;
+    color: var(--color-fg);
+    margin: var(--space-4) 0 var(--space-1);
+  }
+
+  .cert-body :global(p) {
+    margin: 0 0 var(--space-3);
+    color: var(--color-fg-muted);
+  }
+
+  .cert-body :global(strong) {
     color: var(--color-accent);
-    font-size: 1.3rem;
+  }
+
+  .cert-body :global(ul) {
+    margin: 0 0 var(--space-3);
+    padding-left: 1.1rem;
+    list-style: disc;
+  }
+
+  .cert-body :global(li) {
+    color: var(--color-fg-muted);
     margin-bottom: var(--space-1);
   }
 
-  .cert-full {
-    font-size: 0.85rem;
-    margin-bottom: var(--space-2);
+  .cert-body :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 0 var(--space-3);
+    font-size: 0.9rem;
   }
 
-  .cert-duration {
-    display: inline-block;
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    color: var(--color-fg);
-    padding: 0.15rem 0.6rem;
-    border: 1px solid var(--color-border);
-    border-radius: 999px;
-    margin-bottom: var(--space-3);
+  .cert-body :global(th),
+  .cert-body :global(td) {
+    text-align: left;
+    padding: var(--space-1) var(--space-2);
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-fg-muted);
   }
 
-  .cert-story {
-    font-size: 0.88rem;
+  .cert-body :global(th) {
     color: var(--color-fg-subtle);
-    font-style: italic;
-  }
-
-  @media (max-width: 40rem) {
-    .cert-grid {
-      grid-template-columns: 1fr;
-    }
+    font-weight: 400;
   }
 </style>
