@@ -112,9 +112,8 @@
 ### 2-2. 構成
 
 ```
-   ユーザー → Route 53 → CloudFront (+OAC, +WAF) → S3 (private)
+   ユーザー → CloudFront (xxxxx.cloudfront.net) (+OAC, +WAF) → S3 (private)
                             ↑
-                     ACM (us-east-1) TLS証明書
                      Response Headers Policy (HSTS / CSP / X-Frame-Options)
 
   CI/CD:  GitHub Actions --OIDC--> IAM Role (AssumeRoleWithWebIdentity)
@@ -123,6 +122,12 @@
   監視:   CloudWatch Alarm (5xxエラー率/レイテンシ) → SNS → メール通知
           AWS Budgets → 予算超過アラート
 ```
+
+> **ドメインについて**
+> 初期構築では独自ドメインを使わず、CloudFront のデフォルトドメインで公開する。
+> Terraform で管理しているため、独自ドメインは後から `dns` モジュールと
+> ACM 証明書を追加するだけで移行できる。
+> コストを最小化しつつ、必要になった時点で拡張する方針。
 
 ### 2-3. 設計判断（README に明記すること）
 
@@ -202,7 +207,7 @@ portfolio/
 │   │   ├── static-site/         # S3 + バケットポリシー
 │   │   ├── cdn/                 # CloudFront + OAC + ACM + Headers Policy
 │   │   ├── waf/                 # AWS WAF（Free ティアに含まれるので活用）
-│   │   ├── dns/                 # Route 53 レコード
+│   │   ├── dns/               # ※Phase 12（独自ドメイン導入時）に追加
 │   │   └── monitoring/          # CloudWatch Alarm + SNS + AWS Budgets
 │   ├── envs/prod/               # dev は作らない（コスト最小化）
 │   └── bootstrap/               # tfstate用S3/DynamoDBを作る初回限定コード
@@ -279,19 +284,20 @@ ADR（設計判断記録）を書くこと。「なぜその技術を選んだ�
 
 ## 6. 実装ステップ
 
-| Phase | 内容 | 目安 |
+| Phase | 内容 | 状態 |
 |---|---|---|
-| 1 | Astro 雛形、コンテンツをMarkdown化 | 1日 |
-| 2 | デザイン実装、レスポンシブ対応 | 2日 |
-| 3 | ドメイン取得 | 1時間 |
-| 4 | AWSアカウント確認 + 予算アラート設定 | 30分 |
-| 5 | bootstrap で tfstate 用リソース作成 | 1時間 |
-| 6 | Terraform モジュール実装 | 1〜2日 |
-| 7 | CloudFront 定額料金プラン Free ティアへ登録 | 15分 |
-| 8 | GitHub Actions OIDC 設定、CI/CD 構築 | 半日 |
-| 9 | 監視・アラート追加、セキュリティヘッダー適用 | 半日 |
-| 10 | README / ADR / 構成図の作成 | 半日 |
-| 11 | 「This Site's Architecture」セクション実装 | 半日 |
+| 1 | Astro 雛形、コンテンツ執筆 | 完了 |
+| 2 | ページ分割、デザイン実装 | 完了 |
+| 3 | AWSアカウント確認 + 予算アラート | 完了 |
+| 4 | bootstrap で tfstate 用リソース作成 | |
+| 5 | Terraform モジュール実装（S3/CloudFront/OAC/WAF） | |
+| 6 | CloudFront 定額料金プラン Free ティアへ登録 | |
+| 7 | GitHub Actions OIDC 設定、CI/CD 構築 | |
+| 8 | 監視・アラート追加、セキュリティヘッダー適用 | |
+| 9 | README / ADR / 構成図の作成 | |
+| 10 | 「This Site's Architecture」セクション実装 | |
+| 11 | 公開前の機密情報チェック、リポジトリを Public 化 | |
+| 12 | （任意）独自ドメイン導入 | |
 
 **Phase 1-2 を先に完成させること。** インフラから作るとコンテンツが空のまま時間が過ぎる。
 中身が先、器は後。
