@@ -1,18 +1,25 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 import Section from "./Section.astro";
 
 // 掲載順 = 技術的インパクト順（時系列順にしない）
 const works = (await getCollection("works")).sort(
   (a, b) => a.data.order - b.data.order,
 );
+
+const cards = await Promise.all(
+  works.map(async (work) => {
+    const { Content } = await render(work);
+    return { work, Content };
+  }),
+);
 ---
 
 <Section id="works" eyebrow="Works" title="実績">
   <ol class="works-list">
     {
-      works.map((work) => (
-        <li class="work-card">
+      cards.map(({ work, Content }) => (
+        <li class:list={["work-card", { "is-featured": work.data.featured }]}>
           <div class="work-head">
             <span class="work-order">{String(work.data.order).padStart(2, "0")}</span>
             <div>
@@ -20,34 +27,29 @@ const works = (await getCollection("works")).sort(
               <p class="work-meta">
                 {work.data.period}
                 {work.data.role && ` ・ ${work.data.role}`}
+                {work.data.teamSize && `（チーム${work.data.teamSize}名）`}
               </p>
+              {work.data.phase.length > 0 && (
+                <ul class="work-phase">
+                  {work.data.phase.map((p) => (
+                    <li>{p}</li>
+                  ))}
+                </ul>
+              )}
             </div>
           </div>
 
-          <dl class="work-details">
-            {work.data.challenge && (
-              <>
-                <dt>課題</dt>
-                <dd>{work.data.challenge}</dd>
-              </>
-            )}
-            <dt>打ち手</dt>
-            <dd>{work.data.approach}</dd>
-            <dt>成果</dt>
-            <dd class:list={{ "is-todo": !work.data.result }}>
-              {work.data.result || "TODO: 成果を追記"}
-            </dd>
-          </dl>
+          <div class="work-body">
+            <Content />
+          </div>
 
-          {work.data.tech.length > 0 && (
+          {work.data.stack.length > 0 && (
             <ul class="work-tech">
-              {work.data.tech.map((t) => (
+              {work.data.stack.map((t) => (
                 <li>{t}</li>
               ))}
             </ul>
           )}
-
-          {work.data.note && <p class="work-note">※ {work.data.note}</p>}
         </li>
       ))
     }
@@ -66,6 +68,10 @@ const works = (await getCollection("works")).sort(
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
     background: var(--color-bg-elevated);
+  }
+
+  .work-card.is-featured {
+    border-color: var(--color-accent-border);
   }
 
   .work-head {
@@ -92,34 +98,89 @@ const works = (await getCollection("works")).sort(
     font-size: 0.85rem;
   }
 
-  .work-details {
-    display: grid;
-    grid-template-columns: 5rem 1fr;
-    gap: var(--space-1) var(--space-3);
-    margin: 0 0 var(--space-3);
+  .work-phase {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
   }
 
-  .work-details dt {
+  .work-phase li {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    padding: 0.1rem 0.55rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    color: var(--color-fg-subtle);
+  }
+
+  .work-body {
+    margin-bottom: var(--space-3);
+    font-size: 0.92rem;
+  }
+
+  .work-body :global(h2) {
+    font-size: 0.95rem;
+    color: var(--color-fg-subtle);
+    margin: var(--space-3) 0 var(--space-1);
+  }
+
+  .work-body :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  .work-body :global(p) {
+    margin: 0 0 var(--space-2);
+    color: var(--color-fg-muted);
+  }
+
+  .work-body :global(ul) {
+    margin: 0 0 var(--space-2);
+    padding-left: 1.1rem;
+    list-style: disc;
+  }
+
+  .work-body :global(li) {
+    color: var(--color-fg-muted);
+    margin-bottom: var(--space-1);
+  }
+
+  .work-body :global(strong) {
+    color: var(--color-fg);
+  }
+
+  .work-body :global(blockquote) {
+    margin: 0 0 var(--space-2);
+    padding-left: var(--space-2);
+    border-left: 2px solid var(--color-border);
     color: var(--color-fg-subtle);
     font-size: 0.85rem;
   }
 
-  .work-details dd {
-    margin: 0;
-    color: var(--color-fg-muted);
-    font-size: 0.92rem;
+  .work-body :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 0 var(--space-2);
+    font-size: 0.85rem;
   }
 
-  .work-details dd.is-todo {
+  .work-body :global(th),
+  .work-body :global(td) {
+    text-align: left;
+    padding: var(--space-1) var(--space-2);
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-fg-muted);
+  }
+
+  .work-body :global(th) {
     color: var(--color-fg-subtle);
-    font-style: italic;
+    font-weight: 400;
   }
 
   .work-tech {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-2);
-    margin-bottom: var(--space-2);
   }
 
   .work-tech li {
@@ -129,20 +190,5 @@ const works = (await getCollection("works")).sort(
     border: 1px solid var(--color-accent-border);
     border-radius: 999px;
     color: var(--color-accent);
-  }
-
-  .work-note {
-    font-size: 0.8rem;
-    color: var(--color-fg-subtle);
-  }
-
-  @media (max-width: 40rem) {
-    .work-details {
-      grid-template-columns: 1fr;
-    }
-
-    .work-details dt {
-      margin-top: var(--space-2);
-    }
   }
 </style>
