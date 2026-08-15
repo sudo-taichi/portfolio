@@ -5,6 +5,7 @@ role: "管理者"
 teamSize: 4
 phase: ["構築"]
 stack: ["Terraform", "Gemini (Gem)", "Compute Engine", "IAP", "VPC Firewall", "Ubuntu LTS", "systemd"]
+summary: "Azure 上の勤怠管理基盤を GCP へ再現する移行プロジェクト。Gemini の Gem 機能でインフラ構築支援エージェントを自作し、チームへ展開。構築フェーズを約2週間で完遂した。"
 featured: true
 order: 1
 ---

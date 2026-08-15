@@ -5,6 +5,7 @@ role: "管理者"
 teamSize: 5
 phase: ["設計", "構築"]
 stack: ["Azure VM", "VNet", "NSG", "Azure Database for MySQL", "Key Vault", "Managed Identity", "Defender for Cloud", "Log Analytics", "Azure Backup", "Nginx", "Java", "certbot"]
+summary: "社内向け勤怠管理システムの基盤を Azure 上に構築。可用性 99.90% / RPO 60分 / RTO 120分の要件を満たしつつ、DB の閉域化とシークレットレスな実行環境を実現した。"
 featured: true
 order: 2
 ---

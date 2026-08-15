@@ -1,58 +1,35 @@
 ---
-import { getEntry, render } from "astro:content";
+import { getEntry } from "astro:content";
 import Section from "./Section.astro";
 
 const entry = await getEntry("about", "index");
-const { Content } = await render(entry!);
 ---
 
 <Section id="about" eyebrow="About" title="経歴">
-  <div class="about-body">
-    <Content />
+  <div class="about-summary">
+    <p>{entry!.data.summary}</p>
+    <a class="more-link" href="/about">経歴の詳細を見る →</a>
   </div>
 </Section>
 
 <style>
-  .about-body {
-    max-width: 65ch;
+  .about-summary {
+    max-width: var(--prose-width);
   }
 
-  .about-body :global(h2) {
-    font-size: 1.1rem;
-    color: var(--color-fg);
-    margin: var(--space-5) 0 var(--space-2);
-  }
-
-  .about-body :global(h2:first-child) {
-    margin-top: 0;
-  }
-
-  .about-body :global(p) {
-    margin: 0 0 var(--space-3);
+  .about-summary p {
     color: var(--color-fg-muted);
+    margin: 0 0 var(--space-4);
   }
 
-  .about-body :global(strong) {
-    color: var(--color-fg);
-  }
-
-  .about-body :global(table) {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 0 0 var(--space-3);
+  .more-link {
+    font-family: var(--font-mono);
     font-size: 0.9rem;
+    color: var(--color-accent);
+    text-decoration: none;
   }
 
-  .about-body :global(th),
-  .about-body :global(td) {
-    text-align: left;
-    padding: var(--space-1) var(--space-2);
-    border-bottom: 1px solid var(--color-border);
-    color: var(--color-fg-muted);
-  }
-
-  .about-body :global(th) {
-    color: var(--color-fg-subtle);
-    font-weight: 400;
+  .more-link:hover {
+    text-decoration: underline;
   }
 </style>

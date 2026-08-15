@@ -1,0 +1,23 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import DetailLayout from "../layouts/DetailLayout.astro";
+import { getEntry, render } from "astro:content";
+
+const entry = await getEntry("activities", "index");
+const { Content, headings } = await render(entry!);
+---
+
+<BaseLayout
+  title="Activities | Taichi Sudo"
+  description="インフラ業務の傍らで取り組んでいる、社内業務改善アプリの企画・要件定義や主体的な機会創出などの活動記録。"
+>
+  <DetailLayout
+    eyebrow="Activities"
+    title="その他の取り組み"
+    backHref="/"
+    backLabel="トップに戻る"
+    headings={headings}
+  >
+    <Content />
+  </DetailLayout>
+</BaseLayout>

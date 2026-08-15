@@ -1,0 +1,225 @@
+---
+const { pathname } = Astro.url;
+
+const navItems = [
+  { href: "/", label: "Home" },
+  { href: "/#works", label: "Works" },
+  { href: "/activities", label: "Activities" },
+  { href: "/about", label: "About" },
+  { href: "/skills", label: "Skills" },
+  { href: "/#contact", label: "Contact" },
+];
+
+const isCurrent = (href: string) =>
+  href.startsWith("/#") ? undefined : pathname === href ? "page" : undefined;
+---
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="brand" href="/">
+      <span class="prompt">$</span> sudo_taichi
+    </a>
+
+    <nav class="site-nav" aria-label="メインナビゲーション">
+      <ul>
+        {
+          navItems.map((item) => (
+            <li>
+              <a href={item.href} aria-current={isCurrent(item.href)}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <button
+      class="nav-toggle"
+      id="nav-toggle"
+      type="button"
+      aria-label="メニューを開く"
+      aria-expanded="false"
+      aria-controls="mobile-nav"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+
+  <nav class="mobile-nav" id="mobile-nav" aria-label="モバイルナビゲーション" hidden>
+    <ul>
+      {
+        navItems.map((item) => (
+          <li>
+            <a href={item.href} aria-current={isCurrent(item.href)}>
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</header>
+
+<script>
+  const toggle = document.getElementById("nav-toggle");
+  const mobileNav = document.getElementById("mobile-nav");
+
+  const closeMenu = () => {
+    toggle?.setAttribute("aria-expanded", "false");
+    mobileNav?.setAttribute("hidden", "");
+    document.body.classList.remove("nav-open");
+  };
+
+  toggle?.addEventListener("click", () => {
+    const expanded = toggle.getAttribute("aria-expanded") === "true";
+    if (expanded) {
+      closeMenu();
+    } else {
+      toggle.setAttribute("aria-expanded", "true");
+      mobileNav?.removeAttribute("hidden");
+      document.body.classList.add("nav-open");
+    }
+  });
+
+  mobileNav?.addEventListener("click", (event) => {
+    const target = event.target;
+    if (target instanceof HTMLElement && target.tagName === "A") {
+      closeMenu();
+    }
+  });
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(11, 15, 16, 0.85);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .site-header-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    height: var(--header-height);
+    padding: 0 var(--space-3);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .brand {
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    color: var(--color-fg);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+  }
+
+  .brand .prompt {
+    color: var(--color-accent);
+    margin-right: var(--space-1);
+  }
+
+  .site-nav ul {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .site-nav a {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--color-fg-muted);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .site-nav a:hover,
+  .site-nav a[aria-current="page"] {
+    color: var(--color-accent);
+  }
+
+  .nav-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0;
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+  }
+
+  .nav-toggle span {
+    display: block;
+    width: 1.1rem;
+    height: 1.5px;
+    margin: 0 auto;
+    background: var(--color-fg);
+    transition: transform 0.15s ease, opacity 0.15s ease;
+  }
+
+  .nav-toggle[aria-expanded="true"] span:nth-child(1) {
+    transform: translateY(6.5px) rotate(45deg);
+  }
+
+  .nav-toggle[aria-expanded="true"] span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .nav-toggle[aria-expanded="true"] span:nth-child(3) {
+    transform: translateY(-6.5px) rotate(-45deg);
+  }
+
+  .mobile-nav {
+    display: none;
+    border-top: 1px solid var(--color-border);
+    background: var(--color-bg);
+  }
+
+  .mobile-nav ul {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .mobile-nav a {
+    display: block;
+    padding: var(--space-3) 0;
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    color: var(--color-fg-muted);
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .mobile-nav li:last-child a {
+    border-bottom: none;
+  }
+
+  .mobile-nav a[aria-current="page"] {
+    color: var(--color-accent);
+  }
+
+  @media (max-width: 48rem) {
+    .site-nav {
+      display: none;
+    }
+
+    .nav-toggle {
+      display: flex;
+    }
+
+    .mobile-nav:not([hidden]) {
+      display: block;
+    }
+  }
+</style>

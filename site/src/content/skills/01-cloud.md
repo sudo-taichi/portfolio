@@ -2,6 +2,7 @@
 category: cloud
 categoryLabel: クラウド
 title: Azure / AWS / GCP
+summary: "Azure を主力に AZ-305 を保持。AWS-SAA も取得し、GCP でも実務経験あり。3クラウドを横断して設計できる。"
 order: 1
 ---
 

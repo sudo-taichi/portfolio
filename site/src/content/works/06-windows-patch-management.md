@@ -5,6 +5,7 @@ role: "リーダー"
 teamSize: 4
 phase: ["保守"]
 stack: ["Windows Server 2019", "WSUS", "JP1/AJS3"]
+summary: "Windows OS およびソフトウェアのパッチ適用プロジェクトを4名のチームでリーダーとして統括。脆弱性情報の収集から適用作業までを一貫して管理し、確実性を最優先した運用体制を構築した。"
 featured: false
 order: 6
 ---

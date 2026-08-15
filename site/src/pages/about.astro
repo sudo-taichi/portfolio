@@ -1,0 +1,23 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import DetailLayout from "../layouts/DetailLayout.astro";
+import { getEntry, render } from "astro:content";
+
+const entry = await getEntry("about", "index");
+const { Content, headings } = await render(entry!);
+---
+
+<BaseLayout
+  title="About | Taichi Sudo"
+  description="須藤大智の経歴。理学療法士・整体師からインフラエンジニアへ転身し、Azure/AWS の資格取得と実務でのキャリアを重ねてきた歩み。"
+>
+  <DetailLayout
+    eyebrow="About"
+    title="経歴"
+    backHref="/"
+    backLabel="トップに戻る"
+    headings={headings}
+  >
+    <Content />
+  </DetailLayout>
+</BaseLayout>

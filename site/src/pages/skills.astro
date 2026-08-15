@@ -1,0 +1,49 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import DetailLayout from "../layouts/DetailLayout.astro";
+import { getCollection, render } from "astro:content";
+
+const entries = (await getCollection("skills")).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+
+const sections = await Promise.all(
+  entries.map(async (entry) => {
+    const { Content, headings } = await render(entry);
+    return { entry, Content, headings };
+  }),
+);
+
+const toc = sections.flatMap(({ entry, headings }) => [
+  {
+    depth: 2,
+    slug: entry.id,
+    text: `${entry.data.categoryLabel} — ${entry.data.title}`,
+  },
+  ...headings,
+]);
+---
+
+<BaseLayout
+  title="Skills | Taichi Sudo"
+  description="クラウド / IaC / セキュリティ / PM の4領域におけるスキルセット詳細。Azure・AWS・GCP、Terraform、ゼロトラスト設計、チームマネジメントの経験をまとめている。"
+>
+  <DetailLayout
+    eyebrow="Skills"
+    title="スキル"
+    backHref="/"
+    backLabel="トップに戻る"
+    headings={toc}
+  >
+    {
+      sections.map(({ entry, Content }) => (
+        <section id={entry.id} class="skill-section">
+          <h2>
+            {entry.data.categoryLabel} — {entry.data.title}
+          </h2>
+          <Content />
+        </section>
+      ))
+    }
+  </DetailLayout>
+</BaseLayout>

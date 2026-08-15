@@ -1,55 +1,45 @@
 ---
-import { getCollection, render } from "astro:content";
+import { getCollection } from "astro:content";
 import Section from "./Section.astro";
 
 // 掲載順 = 技術的インパクト順（時系列順にしない）
 const works = (await getCollection("works")).sort(
   (a, b) => a.data.order - b.data.order,
 );
-
-const cards = await Promise.all(
-  works.map(async (work) => {
-    const { Content } = await render(work);
-    return { work, Content };
-  }),
-);
 ---
 
 <Section id="works" eyebrow="Works" title="実績">
   <ol class="works-list">
     {
-      cards.map(({ work, Content }) => (
+      works.map((work) => (
         <li class:list={["work-card", { "is-featured": work.data.featured }]}>
-          <div class="work-head">
-            <span class="work-order">{String(work.data.order).padStart(2, "0")}</span>
-            <div>
-              <h3>{work.data.title}</h3>
-              <p class="work-meta">
-                {work.data.period}
-                {work.data.role && ` ・ ${work.data.role}`}
-                {work.data.teamSize && `（チーム${work.data.teamSize}名）`}
-              </p>
-              {work.data.phase.length > 0 && (
-                <ul class="work-phase">
-                  {work.data.phase.map((p) => (
-                    <li>{p}</li>
-                  ))}
-                </ul>
-              )}
+          <a class="work-card-link" href={`/works/${work.id}`}>
+            <div class="work-head">
+              <span class="work-order">
+                {String(work.data.order).padStart(2, "0")}
+              </span>
+              <div>
+                <h3>{work.data.title}</h3>
+                <p class="work-meta">
+                  {work.data.period}
+                  {work.data.role && ` ・ ${work.data.role}`}
+                  {work.data.teamSize && `（チーム${work.data.teamSize}名）`}
+                </p>
+              </div>
             </div>
-          </div>
 
-          <div class="work-body">
-            <Content />
-          </div>
+            <p class="work-excerpt">{work.data.summary}</p>
 
-          {work.data.stack.length > 0 && (
-            <ul class="work-tech">
-              {work.data.stack.map((t) => (
-                <li>{t}</li>
-              ))}
-            </ul>
-          )}
+            {work.data.stack.length > 0 && (
+              <ul class="work-tech">
+                {work.data.stack.slice(0, 5).map((t) => (
+                  <li>{t}</li>
+                ))}
+              </ul>
+            )}
+
+            <span class="work-more">詳細を見る →</span>
+          </a>
         </li>
       ))
     }
@@ -64,14 +54,25 @@ const cards = await Promise.all(
   }
 
   .work-card {
-    padding: var(--space-4);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
     background: var(--color-bg-elevated);
+    transition: border-color 0.15s ease;
+  }
+
+  .work-card:hover {
+    border-color: var(--color-accent-border);
   }
 
   .work-card.is-featured {
     border-color: var(--color-accent-border);
+  }
+
+  .work-card-link {
+    display: block;
+    padding: var(--space-4);
+    text-decoration: none;
+    color: inherit;
   }
 
   .work-head {
@@ -98,89 +99,18 @@ const cards = await Promise.all(
     font-size: 0.85rem;
   }
 
-  .work-phase {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-    margin-top: var(--space-2);
-  }
-
-  .work-phase li {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    padding: 0.1rem 0.55rem;
-    border: 1px solid var(--color-border);
-    border-radius: 999px;
-    color: var(--color-fg-subtle);
-  }
-
-  .work-body {
-    margin-bottom: var(--space-3);
+  .work-excerpt {
+    margin: 0 0 var(--space-3);
+    color: var(--color-fg-muted);
     font-size: 0.92rem;
-  }
-
-  .work-body :global(h2) {
-    font-size: 0.95rem;
-    color: var(--color-fg-subtle);
-    margin: var(--space-3) 0 var(--space-1);
-  }
-
-  .work-body :global(h2:first-child) {
-    margin-top: 0;
-  }
-
-  .work-body :global(p) {
-    margin: 0 0 var(--space-2);
-    color: var(--color-fg-muted);
-  }
-
-  .work-body :global(ul) {
-    margin: 0 0 var(--space-2);
-    padding-left: 1.1rem;
-    list-style: disc;
-  }
-
-  .work-body :global(li) {
-    color: var(--color-fg-muted);
-    margin-bottom: var(--space-1);
-  }
-
-  .work-body :global(strong) {
-    color: var(--color-fg);
-  }
-
-  .work-body :global(blockquote) {
-    margin: 0 0 var(--space-2);
-    padding-left: var(--space-2);
-    border-left: 2px solid var(--color-border);
-    color: var(--color-fg-subtle);
-    font-size: 0.85rem;
-  }
-
-  .work-body :global(table) {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 0 0 var(--space-2);
-    font-size: 0.85rem;
-  }
-
-  .work-body :global(th),
-  .work-body :global(td) {
-    text-align: left;
-    padding: var(--space-1) var(--space-2);
-    border-bottom: 1px solid var(--color-border);
-    color: var(--color-fg-muted);
-  }
-
-  .work-body :global(th) {
-    color: var(--color-fg-subtle);
-    font-weight: 400;
+    max-width: var(--prose-width);
   }
 
   .work-tech {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-2);
+    margin-bottom: var(--space-3);
   }
 
   .work-tech li {
@@ -189,6 +119,13 @@ const cards = await Promise.all(
     padding: 0.15rem 0.6rem;
     border: 1px solid var(--color-accent-border);
     border-radius: 999px;
+    color: var(--color-accent);
+  }
+
+  .work-more {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
     color: var(--color-accent);
   }
 </style>

@@ -41,4 +41,6 @@
 
   /* Layout */
   --max-width: 960px;
+  --prose-width: 42rem; /* 日本語1行あたり約42字 */
+  --header-height: 4rem;
 }

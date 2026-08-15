@@ -5,6 +5,7 @@ role: "サブリーダー"
 teamSize: 10
 phase: ["設計", "構築"]
 stack: ["Microsoft 365", "Google Workspace", "Microsoft Entra Connect", "Google Cloud Directory Sync", "Azure", "Planner"]
+summary: "Microsoft 365 から Google Workspace への全社移行を、10名規模のチームでサブリーダーとして推進。3ヶ月の短納期を遅延なく完遂し、新入社員の成果物レビュー体制も確立した。"
 featured: true
 order: 5
 ---

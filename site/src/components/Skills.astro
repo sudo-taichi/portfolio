@@ -1,33 +1,25 @@
 ---
-import { getCollection, render } from "astro:content";
+import { getCollection } from "astro:content";
 import Section from "./Section.astro";
 
 const entries = (await getCollection("skills")).sort(
   (a, b) => a.data.order - b.data.order,
-);
-
-const cards = await Promise.all(
-  entries.map(async (entry) => {
-    const { Content } = await render(entry);
-    return { entry, Content };
-  }),
 );
 ---
 
 <Section id="skills" eyebrow="Skills" title="スキル">
   <div class="skill-grid">
     {
-      cards.map(({ entry, Content }) => (
+      entries.map((entry) => (
         <article class="skill-card">
           <p class="skill-category">{entry.data.categoryLabel}</p>
           <h3>{entry.data.title}</h3>
-          <div class="skill-body">
-            <Content />
-          </div>
+          <p class="skill-summary">{entry.data.summary}</p>
         </article>
       ))
     }
   </div>
+  <a class="more-link" href="/skills">Skills の詳細を見る →</a>
 </Section>
 
 <style>
@@ -35,6 +27,7 @@ const cards = await Promise.all(
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: var(--space-4);
+    margin-bottom: var(--space-5);
   }
 
   .skill-card {
@@ -57,56 +50,21 @@ const cards = await Promise.all(
     margin-bottom: var(--space-2);
   }
 
-  .skill-body :global(h3) {
-    font-size: 0.92rem;
-    color: var(--color-fg);
-    margin: var(--space-3) 0 var(--space-1);
-  }
-
-  .skill-body :global(h3:first-child) {
-    margin-top: 0;
-  }
-
-  .skill-body :global(p) {
-    font-size: 0.9rem;
-    margin: 0 0 var(--space-2);
-    color: var(--color-fg-muted);
-  }
-
-  .skill-body :global(strong) {
-    color: var(--color-fg);
-  }
-
-  .skill-body :global(ul) {
-    margin: 0 0 var(--space-2);
-    padding-left: 1.1rem;
-    list-style: disc;
-  }
-
-  .skill-body :global(li) {
+  .skill-summary {
     font-size: 0.9rem;
     color: var(--color-fg-muted);
-    margin-bottom: var(--space-1);
+    margin: 0;
   }
 
-  .skill-body :global(table) {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 0 0 var(--space-2);
-    font-size: 0.85rem;
+  .more-link {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--color-accent);
+    text-decoration: none;
   }
 
-  .skill-body :global(th),
-  .skill-body :global(td) {
-    text-align: left;
-    padding: var(--space-1) var(--space-2);
-    border-bottom: 1px solid var(--color-border);
-    color: var(--color-fg-muted);
-  }
-
-  .skill-body :global(th) {
-    color: var(--color-fg-subtle);
-    font-weight: 400;
+  .more-link:hover {
+    text-decoration: underline;
   }
 
   @media (max-width: 40rem) {

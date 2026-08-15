@@ -1,0 +1,100 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import DetailLayout from "../../layouts/DetailLayout.astro";
+import { getCollection, render, type CollectionEntry } from "astro:content";
+
+export async function getStaticPaths() {
+  const works = await getCollection("works");
+  return works.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<"works">;
+}
+
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+---
+
+<BaseLayout
+  title={`${entry.data.title} | Works | Taichi Sudo`}
+  description={entry.data.summary}
+>
+  <DetailLayout
+    eyebrow="Works"
+    title={entry.data.title}
+    backHref="/#works"
+    backLabel="実績一覧に戻る"
+    headings={headings}
+  >
+    <Fragment slot="meta">
+      <div class="work-meta-block">
+        <p class="work-meta-line">
+          {entry.data.period}
+          {entry.data.role && ` ・ ${entry.data.role}`}
+          {entry.data.teamSize && `（チーム${entry.data.teamSize}名）`}
+        </p>
+        <ul class="work-phase">
+          {entry.data.phase.map((p) => (
+            <li>{p}</li>
+          ))}
+        </ul>
+        <ul class="work-tech">
+          {entry.data.stack.map((t) => (
+            <li>{t}</li>
+          ))}
+        </ul>
+      </div>
+    </Fragment>
+
+    <Content />
+  </DetailLayout>
+</BaseLayout>
+
+<style>
+  .work-meta-block {
+    max-width: var(--prose-width);
+    margin-bottom: var(--space-5);
+  }
+
+  .work-meta-line {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--color-fg-muted);
+    margin-bottom: var(--space-2);
+  }
+
+  .work-phase {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-bottom: var(--space-3);
+  }
+
+  .work-phase li {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    padding: 0.1rem 0.55rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    color: var(--color-fg-subtle);
+  }
+
+  .work-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .work-tech li {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    padding: 0.15rem 0.6rem;
+    border: 1px solid var(--color-accent-border);
+    border-radius: 999px;
+    color: var(--color-accent);
+  }
+</style>

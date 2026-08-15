@@ -2,6 +2,7 @@
 category: iac
 categoryLabel: IaC
 title: Terraform
+summary: "GCP 移行プロジェクトで Terraform によるコード化を実践。PowerShell 自動化や生成AIの業務活用にも取り組んでいる。"
 order: 2
 ---
 

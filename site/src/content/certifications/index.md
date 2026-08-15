@@ -1,11 +1,19 @@
-## 保有資格
-
-| 資格 | 取得時期 | 位置づけ |
-|---|---|---|
-| AZ-900 Azure Fundamentals | 入社 1ヶ月 | 基礎 |
-| AZ-104 Azure Administrator Associate | 入社 3ヶ月 | Associate |
-| **AZ-305 Azure Solutions Architect Expert** | 入社 5ヶ月 | **Expert** |
-| AWS-SAA Solutions Architect Associate | 2026年8月 | Associate |
+---
+certList:
+  - name: "AZ-900 Azure Fundamentals"
+    date: "入社 1ヶ月"
+    tier: "基礎"
+  - name: "AZ-104 Azure Administrator Associate"
+    date: "入社 3ヶ月"
+    tier: "Associate"
+  - name: "AZ-305 Azure Solutions Architect Expert"
+    date: "入社 5ヶ月"
+    tier: "Expert"
+    highlight: true
+  - name: "AWS-SAA Solutions Architect Associate"
+    date: "2026年8月"
+    tier: "Associate"
+---
 
 ## 学習アプローチ
 

@@ -1,75 +1,78 @@
 ---
-import { getEntry, render } from "astro:content";
+import { getEntry } from "astro:content";
 import Section from "./Section.astro";
 
 const entry = await getEntry("certifications", "index");
-const { Content } = await render(entry!);
+const certList = entry!.data.certList;
 ---
 
 <Section id="certifications" eyebrow="Certifications" title="保有資格">
   <div class="cert-body">
-    <Content />
+    <table>
+      <thead>
+        <tr>
+          <th>資格</th>
+          <th>取得時期</th>
+          <th>位置づけ</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          certList.map((cert) => (
+            <tr>
+              <td class:list={{ highlight: cert.highlight }}>{cert.name}</td>
+              <td>{cert.date}</td>
+              <td class:list={{ highlight: cert.highlight }}>{cert.tier}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
   </div>
+  <a class="more-link" href="/certifications">詳細を見る →</a>
 </Section>
 
 <style>
   .cert-body {
-    max-width: 65ch;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
-  .cert-body :global(h2) {
-    font-size: 1.1rem;
-    color: var(--color-fg);
-    margin: var(--space-5) 0 var(--space-2);
-  }
-
-  .cert-body :global(h2:first-child) {
-    margin-top: 0;
-  }
-
-  .cert-body :global(h3) {
-    font-size: 0.95rem;
-    color: var(--color-fg);
-    margin: var(--space-4) 0 var(--space-1);
-  }
-
-  .cert-body :global(p) {
-    margin: 0 0 var(--space-3);
-    color: var(--color-fg-muted);
-  }
-
-  .cert-body :global(strong) {
-    color: var(--color-accent);
-  }
-
-  .cert-body :global(ul) {
-    margin: 0 0 var(--space-3);
-    padding-left: 1.1rem;
-    list-style: disc;
-  }
-
-  .cert-body :global(li) {
-    color: var(--color-fg-muted);
-    margin-bottom: var(--space-1);
-  }
-
-  .cert-body :global(table) {
-    width: 100%;
+  table {
     border-collapse: collapse;
-    margin: 0 0 var(--space-3);
     font-size: 0.9rem;
   }
 
-  .cert-body :global(th),
-  .cert-body :global(td) {
+  th,
+  td {
     text-align: left;
-    padding: var(--space-1) var(--space-2);
+    padding: var(--space-2);
     border-bottom: 1px solid var(--color-border);
     color: var(--color-fg-muted);
+    white-space: nowrap;
   }
 
-  .cert-body :global(th) {
+  th {
     color: var(--color-fg-subtle);
     font-weight: 400;
+  }
+
+  td.highlight {
+    color: var(--color-fg);
+    font-weight: 700;
+  }
+
+  .more-link {
+    display: inline-block;
+    margin-top: var(--space-4);
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .more-link:hover {
+    text-decoration: underline;
   }
 </style>

@@ -5,6 +5,7 @@ role: "メンバー"
 teamSize: 5
 phase: ["設計", "構築"]
 stack: ["Microsoft Entra ID", "Microsoft Intune", "条件付きアクセス", "MAM ポリシー", "M365管理センター"]
+summary: "1,000名規模のグローバル環境で、Windows / macOS / iOS / Android 向けの条件付きアクセスポリシーを設計・構築。網羅的なテスト計画により本番展開時のログイン障害ゼロを実現した。"
 featured: true
 order: 3
 ---

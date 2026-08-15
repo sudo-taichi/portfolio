@@ -1,55 +1,35 @@
 ---
-import { getEntry, render } from "astro:content";
+import { getEntry } from "astro:content";
 import Section from "./Section.astro";
 
 const entry = await getEntry("activities", "index");
-const { Content } = await render(entry!);
 ---
 
 <Section id="activities" eyebrow="Activities" title="その他の取り組み">
-  <div class="activity-body">
-    <Content />
+  <div class="activities-summary">
+    <p>{entry!.data.summary}</p>
+    <a class="more-link" href="/activities">詳細を見る →</a>
   </div>
 </Section>
 
 <style>
-  .activity-body {
-    max-width: 65ch;
+  .activities-summary {
+    max-width: var(--prose-width);
   }
 
-  .activity-body :global(h2) {
-    font-size: 1.1rem;
-    color: var(--color-fg);
-    margin: var(--space-5) 0 var(--space-2);
-  }
-
-  .activity-body :global(h2:first-child) {
-    margin-top: 0;
-  }
-
-  .activity-body :global(h3) {
-    font-size: 0.95rem;
-    color: var(--color-fg);
-    margin: var(--space-4) 0 var(--space-1);
-  }
-
-  .activity-body :global(p) {
-    margin: 0 0 var(--space-2);
+  .activities-summary p {
     color: var(--color-fg-muted);
+    margin: 0 0 var(--space-4);
   }
 
-  .activity-body :global(strong) {
+  .more-link {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
     color: var(--color-accent);
+    text-decoration: none;
   }
 
-  .activity-body :global(ul) {
-    margin: 0 0 var(--space-3);
-    padding-left: 1.1rem;
-    list-style: disc;
-  }
-
-  .activity-body :global(li) {
-    color: var(--color-fg-muted);
-    margin-bottom: var(--space-1);
+  .more-link:hover {
+    text-decoration: underline;
   }
 </style>

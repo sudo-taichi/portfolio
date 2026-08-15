@@ -16,9 +16,13 @@ body {
   background: var(--color-bg);
   color: var(--color-fg);
   font-family: var(--font-sans);
-  line-height: 1.7;
+  line-height: 1.9;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+body.nav-open {
+  overflow: hidden;
 }
 
 h1,

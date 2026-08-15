@@ -5,6 +5,7 @@ role: "メンバー"
 teamSize: 5
 phase: ["運用", "保守"]
 stack: ["PowerShell", "Active Directory", "Microsoft Entra ID", "Microsoft Intune", "Zabbix", "Grafana", "NetApp", "Windows Server 2019"]
+summary: "1,000名規模の保守運用・インシデント対応を担当し、属人化していた運用フローを標準化。14ヶ月間で一次対応 SLA 達成率100%を継続維持し、手順書約100件を整備した。"
 featured: true
 order: 4
 ---
