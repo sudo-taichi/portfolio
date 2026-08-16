@@ -20,7 +20,7 @@ data "aws_iam_policy_document" "assume_role" {
     condition {
       test     = "StringEquals"
       variable = "token.actions.githubusercontent.com:sub"
-      values   = ["repo:${var.github_repository}:ref:refs/heads/main"]
+      values   = ["repo:sudo-taichi@317182855/portfolio@1334778771:ref:refs/heads/main"]
     }
   }
 }
